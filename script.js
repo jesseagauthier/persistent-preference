@@ -37,10 +37,10 @@ displayCharacters()
 function displayCharacters() {
     for (const characters of shrekCharacters) {
         CharactersContainer.insertAdjacentHTML("beforeend", `
-             <li class="character card column m-2 is-5 is-flex is-flex-direction-column is-justify-content-end">
-				<img class="card-image mx-auto image is-full" src="${characters.imgurl}" alt="${characters.name}">
+             <li class="character card">
+				<img class="card-image" src="${characters.imgurl}" alt="${characters.name}">
 				<div class="card-content">
-				    <h3 class="card-header-title is-size-3">${characters.name}</h3>
+				    <h3 class="card-header-title">${characters.name}</h3>
 					<p class="content disc">${characters.disc}</p>
 				</div>
 			</li>
