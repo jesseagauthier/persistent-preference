@@ -31,19 +31,81 @@ const shrekCharacters = [
     },
 ];
 
-
 const CharactersContainer = document.getElementById("CharactersContainer");
-displayCharacters()
+displayCharacters();
+
 function displayCharacters() {
-    for (const characters of shrekCharacters) {
+    for (const character of shrekCharacters) {
         CharactersContainer.insertAdjacentHTML("beforeend", `
-             <li class="character card">
-				<img class="card-image" src="${characters.imgurl}" alt="${characters.name}">
-				<div class="card-content">
-				    <h3 class="card-header-title">${characters.name}</h3>
-					<p class="content disc">${characters.disc}</p>
-				</div>
-			</li>
-        `)
+      <li class="column is-3 character card">
+        <img class="card-image" src="${character.imgurl}" alt="${character.name}">
+        <div class="card-content">
+          <h3 class="card-header-title">${character.name}</h3>
+          <p class="content disc">${character.disc}</p>
+        </div>
+      </li>
+    `);
     }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(dropdown => {
+        dropdown.addEventListener('click', event => {
+            event.stopPropagation();
+            dropdown.classList.toggle('is-active');
+        });
+        const themeLinks = dropdown.querySelectorAll('.dropdown-item[data-theme]');
+        themeLinks.forEach(link => {
+            link.addEventListener('click', event => {
+                event.preventDefault();
+                const selectedTheme = link.dataset.theme;
+                applyTheme(selectedTheme);
+                saveThemeToLocalStorage(selectedTheme);
+            });
+        });
+    });
+
+    document.addEventListener('click', event => {
+        dropdowns.forEach(dropdown => {
+            if (!dropdown.contains(event.target)) {
+                dropdown.classList.remove('is-active');
+            }
+        });
+    });
+
+    function applyTheme(theme) {
+        document.body.classList = theme;
+    }
+
+    function saveThemeToLocalStorage(theme) {
+        localStorage.setItem('selectedTheme', theme);
+    }
+
+    function getSavedThemeFromLocalStorage() {
+        return localStorage.getItem('selectedTheme');
+    }
+
+    const savedTheme = getSavedThemeFromLocalStorage();
+    if (savedTheme) {
+        applyTheme(savedTheme);
+    }
+});
+
+const dropdownItems = document.querySelectorAll('.dropdown-item');
+
+function applySelectedStyle(selectedStyle) {
+    const characters = document.querySelectorAll('.character');
+    characters.forEach(character => {
+        character.classList.remove('everything', 'character-only', 'name-only');
+        character.classList.add(selectedStyle);
+    });
+}
+
+dropdownItems.forEach(item => {
+    item.addEventListener('click', () => {
+        const selectedStyle = item.dataset.style;
+        console.log(`Selected Style: ${selectedStyle}`);
+        applySelectedStyle(selectedStyle);
+    });
+});

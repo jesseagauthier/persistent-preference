@@ -1,7 +1,5 @@
 @import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
 
-
-
 :root {
     --swamp: #c9ca3a;
 }
@@ -10,27 +8,57 @@ body {
     padding: 1em;
 }
 
-#CharactersContainer {
-    gap: 10px;
+header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 1em;
 }
 
+#themeControl {
+    flex: 0 1 80px;
+}
+
+#themeControl svg {
+    cursor: pointer;
+}
+
+#CharactersContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+}
+
+
 .character {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     padding: 1em .50em;
-    flex: 1;
+    flex: 1 0 100%;
 }
 
 @media screen and (min-width: 768px) {
+    #CharactersContainer {
+        flex-direction: row;
+        gap: 10px;
+    }
+
     .character {
         flex: 1 0 33%;
-        max-width: 30%;
     }
 }
 
-
 .character img {
-    width: 100%;
-    height: 400px;
+    /* max-width: 50%; */
+    height: 100%;
     padding: 1em;
+    margin: 0 auto;
+    /* min-width: 200px; */
 }
 
 .character .card-content h3 {
@@ -41,22 +69,68 @@ body {
     font-size: 1em;
 }
 
-
-
-
-#shrekTheme {
+body.shrek {
     background-color: var(--swamp);
     color: white;
 }
 
-#shrekTheme .character {
+body.shrek .character {
     background-color: #253431;
     border: 1px solid white;
     color: white;
 }
 
-
-#shrekTheme .character .card-content .card-header-title {
+body.shrek .card-header-title {
     color: white;
-    padding: 0;
+}
+
+body.dark {
+    background-color: black;
+    color: white;
+}
+
+body.dark .card-header-title {
+    color: white;
+}
+
+body.dark .character {
+    background-color: #1a1a1a;
+    border: 1px solid white;
+    color: white;
+}
+
+body.light {
+    background-color: white;
+}
+
+body.light .character {
+    border: 1px solid black;
+}
+
+.character .card-content {
+    display: none;
+}
+
+.character.everything .card-content {
+    display: block;
+}
+
+.character.character-only .card-image {
+    display: block;
+}
+
+.character.name-only .card-image {
+    display: none;
+}
+
+.character.name-only .card-header-title {
+    display: block;
+}
+
+.character.name-only .card-content {
+    display: block;
+}
+
+.character.name-only .disc {
+    display: none;
 }
