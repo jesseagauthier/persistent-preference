@@ -30,21 +30,20 @@ const shrekCharacters = [
         disc: "Puss in Boots is a skilled and charming cat who befriends Shrek and becomes an ally in their adventures."
     },
 ];
-
 const CharactersContainer = document.getElementById("CharactersContainer");
 displayCharacters();
 
 function displayCharacters() {
     for (const character of shrekCharacters) {
         CharactersContainer.insertAdjacentHTML("beforeend", `
-      <li class="column is-3 character card">
-        <img class="card-image" src="${character.imgurl}" alt="${character.name}">
-        <div class="card-content">
-          <h3 class="card-header-title">${character.name}</h3>
-          <p class="content disc">${character.disc}</p>
-        </div>
-      </li>
-    `);
+              <li class="column is-3 character card">
+                <img class="card-image" src="${character.imgurl}" alt="${character.name}">
+                <div class="card-content">
+                  <h3 class="card-header-title">${character.name}</h3>
+                  <p class="content disc">${character.disc}</p>
+                </div>
+              </li>
+            `);
     }
 }
 
@@ -100,6 +99,9 @@ function applySelectedStyle(selectedStyle) {
         character.classList.remove('everything', 'character-only', 'name-only');
         character.classList.add(selectedStyle);
     });
+
+    // Save the selected style to local storage
+    localStorage.setItem('selectedStyle', selectedStyle);
 }
 
 dropdownItems.forEach(item => {
@@ -109,3 +111,9 @@ dropdownItems.forEach(item => {
         applySelectedStyle(selectedStyle);
     });
 });
+
+// Load the previously saved style from local storage and apply it
+const savedStyle = localStorage.getItem('selectedStyle');
+if (savedStyle) {
+    applySelectedStyle(savedStyle);
+}
