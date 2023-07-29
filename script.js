@@ -30,90 +30,116 @@ const shrekCharacters = [
         disc: "Puss in Boots is a skilled and charming cat who befriends Shrek and becomes an ally in their adventures."
     },
 ];
-const CharactersContainer = document.getElementById("CharactersContainer");
 displayCharacters();
 
+
 function displayCharacters() {
+    const CharactersContainer = document.getElementById("CharactersContainer");
     for (const character of shrekCharacters) {
         CharactersContainer.insertAdjacentHTML("beforeend", `
-              <li class="column is-3 character card">
-                <img class="card-image" src="${character.imgurl}" alt="${character.name}">
-                <div class="card-content">
-                  <h3 class="card-header-title">${character.name}</h3>
-                  <p class="content disc">${character.disc}</p>
-                </div>
-              </li>
-            `);
+                    <li class="column is-3 character">
+                        <img class="card-image" src="${character.imgurl}" alt="${character.name}">
+                        <div class="card-content">
+                            <h3 class="card-header-title">${character.name}</h3>
+                            <p class="content disc">${character.disc}</p>
+                        </div>
+                    </li>
+                `);
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const dropdowns = document.querySelectorAll('.dropdown');
-    dropdowns.forEach(dropdown => {
-        dropdown.addEventListener('click', event => {
-            event.stopPropagation();
-            dropdown.classList.toggle('is-active');
-        });
-        const themeLinks = dropdown.querySelectorAll('.dropdown-item[data-theme]');
-        themeLinks.forEach(link => {
-            link.addEventListener('click', event => {
-                event.preventDefault();
-                const selectedTheme = link.dataset.theme;
-                applyTheme(selectedTheme);
-                saveThemeToLocalStorage(selectedTheme);
-            });
-        });
+
+if (localStorage.getItem("selectedStyle") === null) {
+    localStorage.setItem('selectedStyle', 'everything');
+    // console.log("No Default style, Setting to everything")
+    let savedStyle = localStorage.getItem('selectedStyle');
+    applySelectedStyle(savedStyle);
+} if (localStorage.getItem("selectedStyle") == undefined) {
+    localStorage.setItem('selectedStyle', 'everything');
+    // console.log("No Default style, Setting to everything")
+    let savedStyle = localStorage.getItem('selectedStyle');
+    applySelectedStyle(savedStyle);
+} else {
+    let savedStyle = localStorage.getItem('selectedStyle');
+    applySelectedStyle(savedStyle);
+    // console.log("Style is set to " + savedStyle)
+}
+
+if (localStorage.getItem("selectedTheme") === null) {
+    // console.log("No Default theme, Setting to light")
+    localStorage.setItem('selectedTheme', 'light');
+    let theme = localStorage.getItem('selectedTheme');
+    applyTheme(theme)
+} if (localStorage.getItem("selectedTheme") == undefined) {
+    // console.log("No Default theme, Setting to light")
+    localStorage.setItem('selectedTheme', 'light');
+    let theme = localStorage.getItem('selectedTheme');
+    applyTheme(theme)
+} else {
+    let theme = localStorage.getItem('selectedTheme');
+    applyTheme(theme)
+}
+
+const dropdowns = document.querySelectorAll('.dropdown');
+
+dropdowns.forEach(dropdown => {
+    dropdown.addEventListener('click', event => {
+        dropdown.classList.toggle('is-active');
     });
 
-    document.addEventListener('click', event => {
-        dropdowns.forEach(dropdown => {
-            if (!dropdown.contains(event.target)) {
-                dropdown.classList.remove('is-active');
-            }
+    const themeLinks = dropdown.querySelectorAll('.dropdown-item[data-theme]');
+    themeLinks.forEach(link => {
+        link.addEventListener('click', event => {
+            event.preventDefault();
+            const selectedTheme = link.dataset.theme;
+            localStorage.setItem('selectedTheme', selectedTheme);
+            let theme = localStorage.getItem('selectedTheme');
+            applyTheme(theme)
         });
     });
-
-    function applyTheme(theme) {
-        document.body.classList = theme;
-    }
-
-    function saveThemeToLocalStorage(theme) {
-        localStorage.setItem('selectedTheme', theme);
-    }
-
-    function getSavedThemeFromLocalStorage() {
-        return localStorage.getItem('selectedTheme');
-    }
-
-    const savedTheme = getSavedThemeFromLocalStorage();
-    if (savedTheme) {
-        applyTheme(savedTheme);
-    }
 });
 
-const dropdownItems = document.querySelectorAll('.dropdown-item');
-
-function applySelectedStyle(selectedStyle) {
-    const characters = document.querySelectorAll('.character');
-    characters.forEach(character => {
-        character.classList.remove('everything', 'character-only', 'name-only');
-        character.classList.add(selectedStyle);
-    });
-
-    // Save the selected style to local storage
-    localStorage.setItem('selectedStyle', selectedStyle);
+function applyTheme(theme) {
+    document.body.classList = theme;
 }
 
+
+
+const dropdownItems = document.querySelectorAll('.characterdrop');
+
+
+// Add click event listeners to each dropdown item
 dropdownItems.forEach(item => {
     item.addEventListener('click', () => {
+        // Get the selected style from the data-style attribute
         const selectedStyle = item.dataset.style;
-        console.log(`Selected Style: ${selectedStyle}`);
+        // Apply the selected style to the character cards
         applySelectedStyle(selectedStyle);
+        localStorage.setItem('selectedStyle', selectedStyle);
     });
 });
 
-// Load the previously saved style from local storage and apply it
-const savedStyle = localStorage.getItem('selectedStyle');
-if (savedStyle) {
-    applySelectedStyle(savedStyle);
+
+
+// Function to apply the selected style to the character cards
+function applySelectedStyle(savedStyle) {
+    const characters = document.querySelectorAll('.character');
+    characters.forEach(character => {
+
+        if (character.classList.contains('everything')) {
+            character.classList.remove('everything');
+            character.classList.add(savedStyle);
+        }
+        if (character.classList.contains('character-only')) {
+            character.classList.remove('character-only');
+            character.classList.add(savedStyle);
+        }
+        if (character.classList.contains('name-only')) {
+            character.classList.remove('name-only');
+            character.classList.add(savedStyle);
+        }
+        else {
+            character.classList.add(savedStyle);
+        }
+    });
 }

@@ -6,6 +6,7 @@
 
 body {
     padding: 1em;
+    min-height: 100vh;
 }
 
 header {
@@ -58,7 +59,6 @@ header {
     height: 100%;
     padding: 1em;
     margin: 0 auto;
-    /* min-width: 200px; */
 }
 
 .character .card-content h3 {
